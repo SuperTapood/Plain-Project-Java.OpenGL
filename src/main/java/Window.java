@@ -12,9 +12,9 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 
 public class Window {
+    public final MouseListener mouseListener;
     private final int width, height;
     private final String title;
-    public final MouseListener mouseListener;
     public boolean stop = false;
     private long glfwWindow;
 
@@ -76,6 +76,7 @@ public class Window {
     }
 
     private void setCallbacks() {
+        // set event callbacks
         glfwSetCursorPosCallback(glfwWindow, mouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindow, mouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, mouseListener::mouseScrollCallback);
@@ -87,14 +88,11 @@ public class Window {
         terminate();
     }
 
-    public void stop() {
-        stop = true;
-    }
-
     private void loop() {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        // frame time settings
         float fps = 0.5f;
         float perFrame = 1 / fps;
         float beginTime = (float) glfwGetTime();
@@ -102,7 +100,6 @@ public class Window {
         float frameTime = 0;
         float dt = 0f;
 
-        //glClearColor(0.1f, 0.09f, 0.1f, 1);
         glClearColor(0, 0, 0, 1);
         Button button = new Button(this, 0, 0, 500, 500, p -> System.out.println("click"));
         while (!glfwWindowShouldClose(glfwWindow) && !stop) {
